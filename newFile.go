@@ -31,7 +31,7 @@ func WriteInFile() {
     check(err)
     defer file.Close()
 
-    data := "new new info \n"
+    data := "\n"
     _, err = file.WriteString(data)
     check(err)
 
@@ -44,22 +44,16 @@ func RemoveNote(fileName string, removeIndex int) {
 
     var lines []string
     scanner := bufio.NewScanner(notes)
-    //var index int = 0
-
-    /*for scanner.Scan() {
-    	if index != removeIndex {
-     		lines = append(lines, scanner.Text())
-     }
-     index++
-     } */
-
-
+    var index int = 0
 
     for scanner.Scan() {
-    	x := scanner.Text()
-	    if (len(x)>= 0 || removeIndex-1 > len(x)){
-			lines = append (x[:removeIndex], x[removeIndex+1:]...)
-	    }
+         text := scanner.Text()
+         if index == removeIndex - 1{
+         	index++
+          	continue
+         }
+         lines = append(lines, text)
+         index++
     }
 
     check(scanner.Err())
@@ -77,5 +71,5 @@ func RemoveElement(array []string, n int)[]string{
 }
 
 func main() {
- 	RemoveNote("new.txt", 0)
+ 	RemoveNote("new.txt", 3)
 }
