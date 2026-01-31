@@ -5,6 +5,7 @@ import (
     "os"
     "bufio"
     "strings"
+    "strconv"
 )
 
 func check(e error) {
@@ -18,6 +19,20 @@ func CreateFile(name string) {
     check(err)
     defer file.Close()
     fmt.Println("File created successfully")
+}
+
+func ReadFile(name string) {
+    myfile, err := os.Open(name)  //open the file
+    check(err)
+    defer myfile.Close()
+
+    scanner := bufio.NewScanner(myfile)  //scan the contents of a file and print line by line
+    for scanner.Scan() {
+        line := scanner.Text()
+        fmt.Println(line)
+    }
+
+    check(scanner.Err())
 }
 
 func AddNote(name string, note string) {
@@ -37,7 +52,8 @@ func DeleteFile(name string) {
     fmt.Println("File deleted")
 }
 
-func RemoveNote(fileName string, removeIndex int) {
+func RemoveNote(fileName string, removeIndex string) {
+	intRemoveIndex, err := strconv.Atoi(removeIndex)
 	notes, err := os.Open(fileName)  //open the file
 	check(err)
     defer notes.Close()
@@ -48,7 +64,7 @@ func RemoveNote(fileName string, removeIndex int) {
 
     for scanner.Scan() {
          text := scanner.Text()
-         if index == removeIndex - 1{
+         if index == intRemoveIndex - 1{
          	index++
           	continue
          }
@@ -75,6 +91,7 @@ func input() string {
 func menu() {
 
 	msg := ""
+	name  := "new"
 
 	for msg != "4" {
 
@@ -88,16 +105,14 @@ func menu() {
 		msg = input()
 
 		if msg == "1" {
-
-			show()
-
+			ReadFile(name)
 		} else if msg == "2" {
 			note := input()
 			AddNote(name, note)
 
 		} else if msg == "3" {
 			index := input()
-			RemoveNote(name ,index)
+			RemoveNote(name, index)
 
 		} else if msg == "4" {
 
