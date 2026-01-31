@@ -3,7 +3,7 @@ import ("bufio"
 		"fmt"
 		"os"
 	//	"strconv"
-	//	"strings"
+	    "strings"
 		)
 
 
@@ -13,14 +13,14 @@ func input() string {
 	scanner.Scan()  
 
 
-	return scanner.Text()
+	return strings.TrimSpace(scanner.Text())
 
 }
 
 
 func show() {
 
-
+	
 }
 
 
