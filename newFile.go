@@ -4,6 +4,7 @@ import (
     "fmt"
     "os"
     "bufio"
+    "strings"
 )
 
 func check(e error) {
@@ -26,7 +27,7 @@ func DeleteFile() {
 }
 
 func WriteInFile() {
-    file, err := os.OpenFile("log.txt", os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+    file, err := os.OpenFile("log.txt", os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0755)
     check(err)
     defer file.Close()
 
@@ -36,17 +37,35 @@ func WriteInFile() {
 
 }
 
-func ReadFile() {
-	notes, err := os.Open("new.txt")  //open the file
+func RemoveNote(fileName string, removeIndex int) {
+	notes, err := os.Open(fileName)  //open the file
 	check(err)
     defer notes.Close()
 
-    scanner := bufio.NewScanner(notes)  //scan the contents of a file and print line by line
+    var lines []string
+    scanner := bufio.NewScanner(notes)
+    //var index int = 0
+
+    /*for scanner.Scan() {
+    	if index != removeIndex {
+     		lines = append(lines, scanner.Text())
+     }
+     index++
+     } */
+
+
+
     for scanner.Scan() {
-        line := scanner.Text()
-        fmt.Println(line)
+    	x := scanner.Text()
+	    if (len(x)>= 0 || removeIndex-1 > len(x)){
+			lines = append (x[:removeIndex], x[removeIndex+1:]...)
+	    }
     }
-    check(err)
+
+    check(scanner.Err())
+
+    update := strings.Join(lines, "\n")
+    os.WriteFile(fileName, []byte(update), 0755)
 }
 
 
@@ -58,6 +77,5 @@ func RemoveElement(array []string, n int)[]string{
 }
 
 func main() {
-	read := ReadFile()
-	return read[0]
+ 	RemoveNote("new.txt", 0)
 }
