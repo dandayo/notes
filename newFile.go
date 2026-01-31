@@ -6,8 +6,7 @@ import (
 )
 
 func CreateFile() {
-	newFile := input()
-    file, err := os.Create(newFile)
+    file, err := os.Create("new.txt")
     if err != nil {
       fmt.Println("Mistake, try again")
     }
@@ -24,20 +23,20 @@ func DeleteFile() {
 }
 
 func WriteInFile() {
-    file, err := os.OpenFile("new.txt", os.O_WRONLY|os.O_CREATE, 0644)
+    file, err := os.OpenFile("log.txt", os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
     if err != nil {
     	fmt.Println("Mistake, try again")
     }
     defer file.Close()
 
-    data := "i""Input()"
+    data := "new new info \n"
     _, err = file.WriteString(data)
     if err != nil {
-    fmt.Println("Mistake, try again")
+    	fmt.Println("Mistake, try again")
     }
 
 }
 
 func main() {
-
+	WriteInFile()
 }
