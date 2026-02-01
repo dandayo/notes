@@ -50,33 +50,28 @@ func menu() {
 
 		msg = input()
 
-		if msg == "1" {
+		switch msg {
 
-			show()
+			case "1":
+				show()
 
-		} else if msg == "2" {
-
-			add()
-
-		} else if msg == "3" {
-
-			delete()
-
-		} else if msg == "4" {
-
-			fmt.Println("===Goodbye!===\n")
-
-			os.Exit(0)
-
-		}  else {
-
-			fmt.Println("\n===You have entered an invalid input!===\n")
-
-			continue
-
+			case "2": 
+				add()
+			
+			case "3":
+				delete()
+			
+			case "4":
+				fmt.Println("===Goodbye!===\n")
+				os.Exit(0)
+			
+			default:
+				fmt.Println("\n===You have entered an invalid input!===\n")
+				continue
+			
 		}
 
-
+		
 	}
 
 
