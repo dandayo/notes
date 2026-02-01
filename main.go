@@ -11,6 +11,7 @@ import (
 func main() {
 	fmt.Println("\n===Welcome to the notes tool!===\n")
 	fileName := os.Args[1]
+	OpenFile(fileName)
 	menu(fileName)
 }
 
@@ -27,8 +28,9 @@ func ReadFile(name string) {
     check(err)
     defer myfile.Close()
 
-    scanner := bufio.NewScanner(myfile)  //scan the contents of a file and print line by line
-    for scanner.Scan() {
+    scanner := bufio.NewScanner(myfile)
+    notes := scanner.Scan()  //scan the contents of a file and print line by line
+    for notes {
         line := scanner.Text()
         fmt.Println(line)
     }
@@ -50,12 +52,10 @@ func fileLineCount(path string) int {
 
 	scanner := bufio.NewScanner(file)
 
-     lines := 0
-
+    lines := 0
 
 	for scanner.Scan() {
 	    lines++
-
 	}
 
 	return lines
@@ -64,7 +64,7 @@ func fileLineCount(path string) int {
 func AddNote(fileName string, note string) {
 
 	path := "notes/"+fileName+".txt"
-	file, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY ,0644)
+	file, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY|os.O_CREATE ,0644)
 	check(err)
 
     defer file.Close()
@@ -78,8 +78,10 @@ func AddNote(fileName string, note string) {
         data =  size + " - " + note
     }
 
+    if note != ""{
+        _, err = file.WriteString(data)
+    }
 
-    _, err = file.WriteString(data)
 
     check(err)
 }
@@ -125,8 +127,12 @@ func input() string {
 
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
-	return strings.TrimSpace(scanner.Text())
+	answer := strings.TrimSpace(scanner.Text())
+	if answer == ""{
+		fmt.Println("Empty input.\nTry again!")
+	}
 
+	return answer
 }
 
 func menu(name string) {
@@ -147,6 +153,7 @@ func menu(name string) {
         switch msg {
 
             case "1":
+            	fmt.Println("===Your notes!===\n")
                 ReadFile(name)
 
             case "2":
@@ -163,15 +170,16 @@ func menu(name string) {
                 	RemoveNote(name, index)
                 }
 
-
-
             case "4":
                 fmt.Println("===Goodbye!===\n")
 			    os.Exit(0)
 
             default:
-                fmt.Println("\n===You have entered an invalid input!===\n")
-			    continue
+            	if msg != ""{
+	             	fmt.Println("\n===You have entered an invalid input!===\n")
+				    continue
+             	}
+
 
         }
 
