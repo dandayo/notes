@@ -8,21 +8,22 @@ import (
     "strconv"
 )
 
-func check(e error) {
-    if e != nil {
-    	fmt.Println("Mistake!")
-    }
+func main() {
+	fmt.Println("\n===Welcome to the notes tool!===\n")
+	fileName := os.Args[1]
+	menu(fileName)
 }
 
-func CreateFile(fileName string) {
-    file, err := os.Create(fileName + ".txt")
-    check(err)
-    defer file.Close()
-    fmt.Println("File created successfully")
+func OpenFile(name string) *os.File{
+	path := "notes/"+name+".txt"
+	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
+	check(err)
+	return file
 }
 
-func ReadFile(fileName string) {
-    myfile, err := os.Open(fileName + ".txt")  //open the file
+func ReadFile(name string) {
+	path := "notes/"+name+".txt"
+    myfile, err := os.Open(path)  //open the file in folder
     check(err)
     defer myfile.Close()
 
@@ -35,72 +36,111 @@ func ReadFile(fileName string) {
     check(scanner.Err())
 }
 
+func check(e error) {
+
+    if e != nil {
+    	fmt.Println("Mistake!")
+    }
+}
+//function to get the number of lines before append
+func fileLineCount(path string) int {
+	file, err := os.Open(path)
+	check(err)
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+     lines := 0
+
+
+	for scanner.Scan() {
+	    lines++
+
+	}
+
+	return lines
+}
+
 func AddNote(fileName string, note string) {
-	fileName = fileName + ".txt"
-    file, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY ,0755)
+
+	path := "notes/"+fileName+".txt"
+	file, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY ,0644)
+	check(err)
+
     defer file.Close()
 
-    data := note + "\n"
+    size := fmt.Sprintf("%03d", fileLineCount(path) + 1)
+    var data string
+
+    if fileLineCount(path) != 0{
+        data = "\n" + size + " - " + note
+    } else {
+        data =  size + " - " + note
+    }
+
+
     _, err = file.WriteString(data)
+
     check(err)
 }
 
 
 func DeleteFile(fileName string) {
-    err := os.Remove(fileName + ".txt")
+    err := os.Remove(fileName)
     check(err)
     fmt.Println("File deleted")
 }
 
 func RemoveNote(fileName string, removeIndex string) {
+	path := "notes/"+fileName+".txt"
 	intRemoveIndex, err := strconv.Atoi(removeIndex)
-	notes, err := os.Open(fileName + ".txt")  //open the file
+	notes, err := os.Open(path)
 	check(err)
     defer notes.Close()
 
     var lines []string
     scanner := bufio.NewScanner(notes)
     var index int = 0
+    // for reordering of line number
+    count := 0
 
     for scanner.Scan() {
-         text := scanner.Text()
+         note := scanner.Text()
          if index == intRemoveIndex - 1{
          	index++
           	continue
          }
-         lines = append(lines, text)
+         count++
+         lineNumber := fmt.Sprintf("%03d", count)
+         lines = append(lines, lineNumber + " - " + note[6:])
          index++
     }
 
     check(scanner.Err())
-
     update := strings.Join(lines, "\n")
-    os.WriteFile(fileName+".txt", []byte(update), 0755)
+    os.WriteFile(path, []byte(update), 0644)
 }
 
 func input() string {
 
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
-
-
 	return strings.TrimSpace(scanner.Text())
 
 }
 
-func menu() {
+func menu(name string) {
 
 	msg := ""
-	name  := "new"
 
 	for msg != "4" {
-
-		fmt.Println("\n===Welcome to the notes tool!===\n")
+		fmt.Println("\n")
 		fmt.Println("Select operation:")
 		fmt.Println("1. Show notes.")
 		fmt.Println("2. Add a note.")
 		fmt.Println("3. Delete a note.")
 		fmt.Println("4. Exit.")
+		fmt.Println("\n")
 
 		msg = input()
 
@@ -110,12 +150,20 @@ func menu() {
                 ReadFile(name)
 
             case "2":
+            	fmt.Println("Enter the note text:")
                 note := input()
 			    AddNote(name, note)
 
             case "3":
+            	fmt.Println("Enter the number of note to remove or 0 to cancel:")
                 index := input()
-			    RemoveNote(name, index)
+                if index == "0" {
+                continue
+                } else {
+                	RemoveNote(name, index)
+                }
+
+
 
             case "4":
                 fmt.Println("===Goodbye!===\n")
@@ -128,7 +176,4 @@ func menu() {
         }
 
 	}
-}
-func main() {
-	 menu()
 }
