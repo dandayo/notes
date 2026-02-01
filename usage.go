@@ -15,6 +15,9 @@ func input() string {
 	if answer == ""{
 		fmt.Println("\033[31mEmpty input.\nTry again!\033[0m")
 	}
+	if answer == "--help"{
+		Help()
+	}
 	return answer
 }
 

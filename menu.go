@@ -47,7 +47,7 @@ func Menu(name string) {
 			    os.Exit(0)
 
             default:
-            	if msg != ""{
+            	if msg != "" && msg !="--help"{
 	             	fmt.Println("\033[31mYou have entered an invalid input!\033[0m")
 				    continue
              	}
