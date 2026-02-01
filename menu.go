@@ -3,19 +3,29 @@ package main
 import (
     "fmt"
     "os"
+
+    "github.com/manifoldco/promptui"
 )
 
 func Menu(name string) {
-
 	msg := ""
+	items := []string{
+		"Show notes",
+		"Add a note",
+		"Delete a note",
+		"Exit",
+	}
 
 	for msg != "4" {
-		fmt.Println("\nSelect operation:\n")
-		fmt.Println("1. Show notes.")
-		fmt.Println("\033[34m2. Add a note.\033[0m")
-		fmt.Println("\033[33m3. Delete a note.\033[0m")
-		fmt.Println("\033[31m4. Exit.\033[0m")
-		fmt.Println("\n")
+
+		prompt := promptui.Select{
+			Label: "Select operation",
+			Items: items,
+			Size: 4,
+		}
+
+		index, _, err := prompt.Run()
+		check(err)
 
 		msg = input()
 

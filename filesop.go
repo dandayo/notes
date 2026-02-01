@@ -6,6 +6,7 @@ import (
     "bufio"
     "strings"
     "strconv"
+    "time"
 )
 
 func OpenFile(fileName string) *os.File{
@@ -61,10 +62,12 @@ func AddNote(fileName string, note string) {
     size := fmt.Sprintf("%03d", fileLineCount(path) + 1)
     var data string
 
+    timeStamp := time.Now().Format("02 Jan 2006 15:04")
+
     if fileLineCount(path) != 0{
-        data = "\n" + size + " - " + note
+        data = "\n" + size + " - " + note + "	 " + timeStamp
     } else {
-        data =  size + " - " + note
+        data =  size + " - " + note + "		" + timeStamp
     }
     if note == ""{
         fmt.Println("\033[31mEmpty input.\033[0m")
