@@ -104,29 +104,28 @@ func menu() {
 
 		msg = input()
 
-		if msg == "1" {
-			ReadFile(name)
-		} else if msg == "2" {
-			note := input()
-			AddNote(name, note)
+        switch msg {
 
-		} else if msg == "3" {
-			index := input()
-			RemoveNote(name, index)
+            case "1":
+                ReadFile(name)
 
-		} else if msg == "4" {
+            case "2":
+                note := input()
+			    AddNote(name, note)  
 
-			fmt.Println("===Goodbye!===\n")
+            case "3":
+                index := input()
+			    RemoveNote(name, index)
 
-			os.Exit(0)
+            case "4":
+                fmt.Println("===Goodbye!===\n")
+			    os.Exit(0)
 
-		}  else {
+            default:
+                fmt.Println("\n===You have entered an invalid input!===\n")
+			    continue
 
-			fmt.Println("\n===You have entered an invalid input!===\n")
-			continue
-
-		}
-
+        }
 
 	}
 }
