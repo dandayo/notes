@@ -22,7 +22,7 @@ func CreateFile(fileName string) {
 }
 
 func ReadFile(fileName string) {
-    myfile, err := os.Open(fileName)  //open the file
+    myfile, err := os.Open(fileName + ".txt")  //open the file
     check(err)
     defer myfile.Close()
 
@@ -36,7 +36,7 @@ func ReadFile(fileName string) {
 }
 
 func AddNote(fileName string, note string) {
-	name = name + ".txt"
+	fileName = fileName + ".txt"
     file, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY ,0755)
     defer file.Close()
 
@@ -54,7 +54,7 @@ func DeleteFile(fileName string) {
 
 func RemoveNote(fileName string, removeIndex string) {
 	intRemoveIndex, err := strconv.Atoi(removeIndex)
-	notes, err := os.Open(fileName)  //open the file
+	notes, err := os.Open(fileName + ".txt")  //open the file
 	check(err)
     defer notes.Close()
 
@@ -75,7 +75,7 @@ func RemoveNote(fileName string, removeIndex string) {
     check(scanner.Err())
 
     update := strings.Join(lines, "\n")
-    os.WriteFile(fileName, []byte(update), 0755)
+    os.WriteFile(fileName+".txt", []byte(update), 0755)
 }
 
 func input() string {
@@ -91,7 +91,7 @@ func input() string {
 func menu() {
 
 	msg := ""
-	fileName  := "new"
+	name  := "new"
 
 	for msg != "4" {
 
@@ -104,33 +104,31 @@ func menu() {
 
 		msg = input()
 
-		if msg == "1" {
-			ReadFile(fileName)
-		} else if msg == "2" {
-			note := input()
-			AddNote(fileName, note)
+        switch msg {
 
-		} else if msg == "3" {
-			index := input()
-			RemoveNote(fileName, index)
+            case "1":
+                ReadFile(name)
 
-		} else if msg == "4" {
+            case "2":
+                note := input()
+			    AddNote(name, note)
 
-			fmt.Println("===Goodbye!===\n")
+            case "3":
+                index := input()
+			    RemoveNote(name, index)
 
-			os.Exit(0)
+            case "4":
+                fmt.Println("===Goodbye!===\n")
+			    os.Exit(0)
 
-		}  else {
+            default:
+                fmt.Println("\n===You have entered an invalid input!===\n")
+			    continue
 
-			fmt.Println("\n===You have entered an invalid input!===\n")
-			continue
-
-		}
-
+        }
 
 	}
 }
-
 func main() {
 	 menu()
 }
