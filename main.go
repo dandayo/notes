@@ -15,22 +15,21 @@ func main() {
 	menu(fileName)
 }
 
-func OpenFile(name string) *os.File{
-	path := "notes/"+name+".txt"
+func OpenFile(fileName string) *os.File{
+	path := "notes/"+fileName+".txt"
 	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
 	check(err)
 	return file
 }
 
-func ReadFile(name string) {
-	path := "notes/"+name+".txt"
+func ReadFile(fileName string) {
+	path := "notes/"+fileName+".txt"
     myfile, err := os.Open(path)  //open the file in folder
     check(err)
     defer myfile.Close()
 
-    scanner := bufio.NewScanner(myfile)
-    notes := scanner.Scan()  //scan the contents of a file and print line by line
-    for notes {
+    scanner := bufio.NewScanner(myfile) //scan the contents of a file and print line by line
+    for scanner.Scan() {
         line := scanner.Text()
         fmt.Println(line)
     }
@@ -78,9 +77,11 @@ func AddNote(fileName string, note string) {
         data =  size + " - " + note
     }
 
-    if note != ""{
-        _, err = file.WriteString(data)
+    if note == ""{
+        fmt.Println("You don't have any notes! Add something")
     }
+	_, err = file.WriteString(data)
+
 
 
     check(err)
@@ -108,19 +109,22 @@ func RemoveNote(fileName string, removeIndex string) {
 
     for scanner.Scan() {
          note := scanner.Text()
+
          if index == intRemoveIndex - 1{
          	index++
           	continue
          }
+
          count++
          lineNumber := fmt.Sprintf("%03d", count)
          lines = append(lines, lineNumber + " - " + note[6:])
          index++
     }
 
+
     check(scanner.Err())
     update := strings.Join(lines, "\n")
-    os.WriteFile(path, []byte(update), 0644)
+    os.WriteFile(path, []byte(update), 0755)
 }
 
 func input() string {
