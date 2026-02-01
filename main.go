@@ -1,0 +1,136 @@
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strings"
+    "strconv"
+)
+
+func check(e error) {
+    if e != nil {
+    	fmt.Println("Mistake!")
+    }
+}
+
+func CreateFile(name string) {
+    file, err := os.Create(name + ".txt")
+    check(err)
+    defer file.Close()
+    fmt.Println("File created successfully")
+}
+
+func ReadFile(name string) {
+    myfile, err := os.Open(name)  //open the file
+    check(err)
+    defer myfile.Close()
+
+    scanner := bufio.NewScanner(myfile)  //scan the contents of a file and print line by line
+    for scanner.Scan() {
+        line := scanner.Text()
+        fmt.Println(line)
+    }
+
+    check(scanner.Err())
+}
+
+func AddNote(name string, note string) {
+	name = name + ".txt"
+    file, err := os.OpenFile(name, os.O_APPEND|os.O_WRONLY ,0755)
+    defer file.Close()
+
+    data := note + "\n"
+    _, err = file.WriteString(data)
+    check(err)
+}
+
+
+func DeleteFile(name string) {
+    err := os.Remove(name + ".txt")
+    check(err)
+    fmt.Println("File deleted")
+}
+
+func RemoveNote(fileName string, removeIndex string) {
+	intRemoveIndex, err := strconv.Atoi(removeIndex)
+	notes, err := os.Open(fileName)  //open the file
+	check(err)
+    defer notes.Close()
+
+    var lines []string
+    scanner := bufio.NewScanner(notes)
+    var index int = 0
+
+    for scanner.Scan() {
+         text := scanner.Text()
+         if index == intRemoveIndex - 1{
+         	index++
+          	continue
+         }
+         lines = append(lines, text)
+         index++
+    }
+
+    check(scanner.Err())
+
+    update := strings.Join(lines, "\n")
+    os.WriteFile(fileName, []byte(update), 0755)
+}
+
+func input() string {
+
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+
+
+	return strings.TrimSpace(scanner.Text())
+
+}
+
+func menu() {
+
+	msg := ""
+	name  := "new"
+
+	for msg != "4" {
+
+		fmt.Println("\n===Welcome to the notes tool!===\n")
+		fmt.Println("Select operation:")
+		fmt.Println("1. Show notes.")
+		fmt.Println("2. Add a note.")
+		fmt.Println("3. Delete a note.")
+		fmt.Println("4. Exit.")
+
+		msg = input()
+
+		if msg == "1" {
+			ReadFile(name)
+		} else if msg == "2" {
+			note := input()
+			AddNote(name, note)
+
+		} else if msg == "3" {
+			index := input()
+			RemoveNote(name, index)
+
+		} else if msg == "4" {
+
+			fmt.Println("===Goodbye!===\n")
+
+			os.Exit(0)
+
+		}  else {
+
+			fmt.Println("\n===You have entered an invalid input!===\n")
+			continue
+
+		}
+
+
+	}
+}
+
+func main() {
+	 menu()
+}
