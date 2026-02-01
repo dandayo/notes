@@ -14,15 +14,18 @@ func check(e error) {
     }
 }
 
-func CreateFile(name string) {
-    file, err := os.Create(name + ".txt")
-    check(err)
-    defer file.Close()
-    fmt.Println("File created successfully")
+
+func CreateFile(fileName string) {
+     file, err := os.Create(fileName + ".txt")
+     check(err)
+     defer file.Close()
+     fmt.Println("File created successfully")
 }
 
-func ReadFile(name string) {
-    myfile, err := os.Open(name)  //open the file
+func ReadFile(fileName string) {
+    fmt.Println("\n===Current list===\n")
+
+    myfile, err := os.Open(fileName + ".txt")  //open the file
     check(err)
     defer myfile.Close()
 
@@ -35,55 +38,102 @@ func ReadFile(name string) {
     check(scanner.Err())
 }
 
-func AddNote(name string, note string) {
-	name = name + ".txt"
-    file, err := os.OpenFile(name, os.O_APPEND|os.O_WRONLY ,0755)
+
+//function to get the number of lines before append
+func fileLineCount(path string) int {
+	file, err := os.Open(path)
+
+	if err != nil {
+		return 0
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+     lines := 0
+
+
+	for scanner.Scan() {
+	    lines++
+            
+	}
+
+	return lines
+}
+
+
+func AddNote(fileName string, note string) {
+
+	fileName = fileName + ".txt"
+    file, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY ,0755)
+
     defer file.Close()
 
-    data := note + "\n"
+    size := fmt.Sprintf("%03d", fileLineCount(fileName) + 1)
+    var data string 
+
+
+    
+
+    if fileLineCount(fileName) != 0{
+        data = "\n" + size + " - " + note
+    } else {
+        data =  size + " - " + note
+    }
+
+    
     _, err = file.WriteString(data)
+
     check(err)
 }
 
 
-func DeleteFile(name string) {
-    err := os.Remove(name + ".txt")
+func DeleteFile(fileName string) {
+    err := os.Remove(fileName + ".txt")
     check(err)
     fmt.Println("File deleted")
 }
 
 func RemoveNote(fileName string, removeIndex string) {
 	intRemoveIndex, err := strconv.Atoi(removeIndex)
-	notes, err := os.Open(fileName)  //open the file
+	notes, err := os.Open(fileName + ".txt")  //open the file
 	check(err)
     defer notes.Close()
 
     var lines []string
     scanner := bufio.NewScanner(notes)
     var index int = 0
+    // for reordering of line number
+    count := 0
 
     for scanner.Scan() {
          text := scanner.Text()
+         
          if index == intRemoveIndex - 1{
          	index++
           	continue
          }
-         lines = append(lines, text)
+
+         count++
+         lineNumber := fmt.Sprintf("%03d", count)
+         lines = append(lines, lineNumber + " - " + text[6:])
          index++
     }
 
-    check(scanner.Err())
 
+
+    check(scanner.Err())
     update := strings.Join(lines, "\n")
-    os.WriteFile(fileName, []byte(update), 0755)
+    os.WriteFile(fileName+".txt", []byte(update), 0755)
+
+
 }
 
 func input() string {
 
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
-
-
+   
 	return strings.TrimSpace(scanner.Text())
 
 }
@@ -110,10 +160,13 @@ func menu() {
                 ReadFile(name)
 
             case "2":
+                fmt.Println("\nEnter a note:")
                 note := input()
-			    AddNote(name, note)  
+			    AddNote(name, note)
 
             case "3":
+                ReadFile(name)
+                fmt.Println("\nEnter number to delete:")
                 index := input()
 			    RemoveNote(name, index)
 
@@ -129,7 +182,8 @@ func menu() {
 
 	}
 }
-
 func main() {
-	 menu()
+ 	
+    menu()
+     
 }

@@ -25,7 +25,7 @@ func AddNote(name string, note string) {
     file, err := os.OpenFile(name, os.O_APPEND|os.O_WRONLY ,0755)
     defer file.Close()
 
-    data := note + "\n"
+    data := "\n" + note
     _, err = file.WriteString(data)
     check(err)
 }
