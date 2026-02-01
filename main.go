@@ -14,15 +14,15 @@ func check(e error) {
     }
 }
 
-func CreateFile(name string) {
-    file, err := os.Create(name + ".txt")
+func CreateFile(fileName string) {
+    file, err := os.Create(fileName + ".txt")
     check(err)
     defer file.Close()
     fmt.Println("File created successfully")
 }
 
-func ReadFile(name string) {
-    myfile, err := os.Open(name)  //open the file
+func ReadFile(fileName string) {
+    myfile, err := os.Open(fileName)  //open the file
     check(err)
     defer myfile.Close()
 
@@ -35,9 +35,9 @@ func ReadFile(name string) {
     check(scanner.Err())
 }
 
-func AddNote(name string, note string) {
+func AddNote(fileName string, note string) {
 	name = name + ".txt"
-    file, err := os.OpenFile(name, os.O_APPEND|os.O_WRONLY ,0755)
+    file, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY ,0755)
     defer file.Close()
 
     data := note + "\n"
@@ -46,8 +46,8 @@ func AddNote(name string, note string) {
 }
 
 
-func DeleteFile(name string) {
-    err := os.Remove(name + ".txt")
+func DeleteFile(fileName string) {
+    err := os.Remove(fileName + ".txt")
     check(err)
     fmt.Println("File deleted")
 }
@@ -91,7 +91,7 @@ func input() string {
 func menu() {
 
 	msg := ""
-	name  := "new"
+	fileName  := "new"
 
 	for msg != "4" {
 
@@ -105,14 +105,14 @@ func menu() {
 		msg = input()
 
 		if msg == "1" {
-			ReadFile(name)
+			ReadFile(fileName)
 		} else if msg == "2" {
 			note := input()
-			AddNote(name, note)
+			AddNote(fileName, note)
 
 		} else if msg == "3" {
 			index := input()
-			RemoveNote(name, index)
+			RemoveNote(fileName, index)
 
 		} else if msg == "4" {
 
