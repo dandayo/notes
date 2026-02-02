@@ -8,19 +8,19 @@ import (
     "strconv"
     "time"
 )
-
+//Open file or create the new
 func OpenFile(fileName string) *os.File{
 	path := "notes/"+fileName+".txt"
 	err := os.MkdirAll("notes", 0755)
 	check(err)
 
 	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
-	defer file.Close()
+	defer file.Close()//Starting work with the file
 	check(err)
 
 	return file
 }
-
+//Read file for return list of notes
 func ReadFile(fileName string) {
 	path := "notes/"+fileName+".txt"
     myfile, err := os.Open(path)  //open the file in folder
@@ -34,7 +34,7 @@ func ReadFile(fileName string) {
 	    line := scanner.Text()
 	    fmt.Println(line)
     }
-    if isEmpty {
+    if isEmpty { //If it empty return the message
         fmt.Println("\033[31mYou don't have any notes! Add your first note\033[0m")
     }
     check(scanner.Err())
@@ -55,11 +55,11 @@ func fileLineCount(path string) int {
 	}
 	return lines
 }
-
+//Add notes to file
 func AddNote(fileName string, note string) {
 
-	path := "notes/"+fileName+".txt"
-	file, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY|os.O_CREATE ,0644)
+	path := "notes/"+fileName+".txt" //check the path to folder with files
+	file, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY|os.O_CREATE ,0644)//Add note in file, if we don't have file create a new one and check duplicate
 	check(err)
 
     defer file.Close()
@@ -67,12 +67,12 @@ func AddNote(fileName string, note string) {
     size := fmt.Sprintf("%03d", fileLineCount(path) + 1)
     var data string
 
-    timeStamp := time.Now().Format("02 Jan 2006 15:04")
+    timeStamp := time.Now().Format("02 Jan 2006 15:04")//Add timestamp for note
 
     if fileLineCount(path) != 0{
         data = "\n" + size + " - " + note + "	 " + timeStamp
     } else {
-        data =  size + " - " + note + "		" + timeStamp
+        data =  size + " - " + note + "		" + timeStamp //First note do not create a newline
     }
     if note == ""{
 
@@ -82,17 +82,17 @@ func AddNote(fileName string, note string) {
     check(err)
 }
 
-
+//Func for deleting file
 func DeleteFile(fileName string) {
 	path := "notes/"+fileName+".txt"
     err := os.Remove(path)
     check(err)
-    fmt.Println("File deleted")
+    fmt.Println("File deleted :(")
 }
-
+//Delete note by index from file
 func RemoveNote(fileName string, removeIndex string) {
 	path := "notes/"+fileName+".txt"
-	intRemoveIndex, err := strconv.Atoi(removeIndex)
+	intRemoveIndex, err := strconv.Atoi(removeIndex) //Convert input from string to int
 	notes, err := os.Open(path)
 	check(err)
     defer notes.Close()
@@ -105,14 +105,14 @@ func RemoveNote(fileName string, removeIndex string) {
 
     for scanner.Scan() {
          note := scanner.Text()
-
+        //Skip file that we need to delete
          if index == intRemoveIndex - 1{
          	index++
           	continue
          }
 
          count++
-         lineNumber := fmt.Sprintf("%03d", count)
+         lineNumber := fmt.Sprintf("%03d", count)//Create a index tag for note
          lines = append(lines, lineNumber + " - " + note[6:])
          index++
     }
