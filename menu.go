@@ -9,13 +9,12 @@ func Menu(name string) {
 	msg := ""
 	for msg != "4" {
 
-
-
 		fmt.Println("\nSelect operation:\n")
-		fmt.Println("1. Show notes.")
+		fmt.Println("\033[36m1. Show notes.\033[0m")
 		fmt.Println("\033[34m2. Add a note.\033[0m")
 		fmt.Println("\033[33m3. Delete a note.\033[0m")
-		fmt.Println("\033[31m4. Exit.\033[0m")
+		fmt.Println("\033[31m4. Delete all notes. Be careful\033[0m")
+		fmt.Println("\033[35m5. Exit.\033[0m")
 		fmt.Println("\n")
 		msg = input()
 
@@ -23,13 +22,18 @@ func Menu(name string) {
 
             case "1":
             	EmptyTerminal()
-            	fmt.Println("\033[1m===Your notes!===\n\033[0m")
+                fmt.Printf("\033[4mTitle: %s\033[0m\n", name)
                 ReadFile(name)
             case "2":
             	fmt.Print("\033[3J\033[H\033[2J")
             	fmt.Println("\033[34mEnter the note text:\033[0m")
                 note := input()
-			    AddNote(name, note)
+                if note == "--help"{
+                	continue
+                } else {
+                	AddNote(name, note)
+                }
+
 
             case "3":
            		EmptyTerminal()
@@ -37,18 +41,32 @@ func Menu(name string) {
                 index := input()
                 if index == "0" {
                 continue
+                } else if index == "--help"{
+                	continue
                 } else {
                 	RemoveNote(name, index)
                 }
+            case "4" :
+            	EmptyTerminal()
+                fmt.Println("\033[91mAre you shure?! Press '1' if agree to delete file\033[0m")
+             	doublecheck := input()
+             	if doublecheck != "1"{
+              		continue
+              	} else {
+                    DeleteFile(name)
+                    os.Exit(0)
+               }
 
-            case "4":
+
+            case "5":
            		EmptyTerminal()
             	fmt.Println("\033[1m===Goodbye!===\n\033[0m")
 			    os.Exit(0)
+				EmptyTerminal()
 
             default:
             	if msg != "" && msg !="--help"{
-	             	fmt.Println("\033[31mYou have entered an invalid input!\033[0m")
+	             	fmt.Println("\033[91mYou have entered an invalid input!\033[0m")
 				    continue
              	}
 

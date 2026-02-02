@@ -11,8 +11,13 @@ import (
 
 func OpenFile(fileName string) *os.File{
 	path := "notes/"+fileName+".txt"
-	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
+	err := os.MkdirAll("notes", 0755)
 	check(err)
+
+	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
+	defer file.Close()
+	check(err)
+
 	return file
 }
 
@@ -70,7 +75,6 @@ func AddNote(fileName string, note string) {
         data =  size + " - " + note + "		" + timeStamp
     }
     if note == ""{
-        fmt.Println("\033[31mEmpty input.\033[0m")
 
     } else {
     	_, err = file.WriteString(data)
@@ -80,7 +84,8 @@ func AddNote(fileName string, note string) {
 
 
 func DeleteFile(fileName string) {
-    err := os.Remove(fileName)
+	path := "notes/"+fileName+".txt"
+    err := os.Remove(path)
     check(err)
     fmt.Println("File deleted")
 }
@@ -111,12 +116,6 @@ func RemoveNote(fileName string, removeIndex string) {
          lines = append(lines, lineNumber + " - " + note[6:])
          index++
     }
-
-    check(scanner.Err())
-    update := strings.Join(lines, "\n")
-    os.WriteFile(path, []byte(update), 0755)
-}
-
 
     check(scanner.Err())
     update := strings.Join(lines, "\n")

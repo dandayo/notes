@@ -13,12 +13,11 @@ func main() {
 		fmt.Println("Usage: ./todotool [TAG]\nAlso use --help to read about this tool")
 		return
 	}
-	var fileName string
+
 	if os.Args[1] == "--help"{
 		Help()
 	} else {
-		fileName = os.Args[1]
-		OpenFile(fileName)
-		Menu(fileName)
+		OpenFile(os.Args[1])
+		Menu(os.Args[1])
 	}
 }

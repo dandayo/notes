@@ -13,7 +13,7 @@ func input() string {
 	scanner.Scan()
 	answer := strings.TrimSpace(scanner.Text())
 	if answer == ""{
-		fmt.Println("\033[31mEmpty input.\nTry again!\033[0m")
+		fmt.Println("\033[91mEmpty input.\nTry again!\033[0m")
 	}
 	if answer == "--help"{
 		Help()
@@ -28,6 +28,6 @@ func EmptyTerminal() {
 func check(e error) {
 
     if e != nil {
-    	fmt.Println("\033[31mMistake!\033[0m")
+    	fmt.Println("\033[91mMistake! Something gone wrong\033[0m")
     }
 }
