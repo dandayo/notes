@@ -40,6 +40,8 @@ $ --help
 4. Exit.
 > To exit from tool
 
+Just write the number of function and see the resut!
+
 ### Example
 #### Welcome page
 ```
