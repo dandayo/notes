@@ -7,7 +7,7 @@ import (
 //Menu func
 func Menu(name string) {
 	msg := ""
-	for msg {
+	for msg != "5"{
 		//Print for choose
 		fmt.Println("\nSelect operation:\n")
 		fmt.Println("\033[36m1. Show notes.\033[0m")
