@@ -131,8 +131,3 @@ func RemoveNote(fileName string, removeIndex string) {
     update := strings.Join(lines, "\n")
     os.WriteFile(path, []byte(update), 0755)
 }
-
-    check(scanner.Err())
-    update := strings.Join(lines, "\n")
-    os.WriteFile(path, []byte(update), 0755)
-}
