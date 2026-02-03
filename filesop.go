@@ -13,13 +13,13 @@ func OpenFile(fileName string) *os.File{
 	path := "notes/"+fileName+".txt"
 	err := os.MkdirAll("notes", 0755)
 	check(err)
-
 	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
 	defer file.Close()//Starting work with the file
 	check(err)
 
 	return file
 }
+
 //Read file for return list of notes
 func ReadFile(fileName string) {
 	path := "notes/"+fileName+".txt"
@@ -93,10 +93,12 @@ func DeleteFile(fileName string) {
 func RemoveNote(fileName string, removeIndex string) {
 	path := "notes/"+fileName+".txt"
 	intRemoveIndex, err := strconv.Atoi(removeIndex) //Convert input from string to int
+	if err != nil {
+		fmt.Println("\033[91mInvalid input, try again or use --help.\033[0m")
+	}
 	notes, err := os.Open(path)
 	check(err)
     defer notes.Close()
-
     var lines []string
     scanner := bufio.NewScanner(notes)
     var index int = 0
@@ -110,12 +112,21 @@ func RemoveNote(fileName string, removeIndex string) {
          	index++
           	continue
          }
-
          count++
          lineNumber := fmt.Sprintf("%03d", count)//Create a index tag for note
          lines = append(lines, lineNumber + " - " + note[6:])
          index++
     }
+    if len(lines) < intRemoveIndex - 1{
+    	fmt.Println(len(lines))
+    	fmt.Println("\033[91mInvalid input, try again or use --help.\033[0m")
+    }
+
+    check(scanner.Err())
+    update := strings.Join(lines, "\n")
+    os.WriteFile(path, []byte(update), 0755)
+}
+
 
     check(scanner.Err())
     update := strings.Join(lines, "\n")
