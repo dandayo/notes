@@ -104,11 +104,18 @@ func RemoveNote(fileName string, removeIndex string) {
     var index int = 0
     // for reordering of line number
     count := 0
+    //Check that we write correct index
+    for scanner.Scan() {
+    	lines = append(lines, scanner.Text())
+    }
+    if intRemoveIndex > len(lines){
+    	fmt.Println("\033[91mInvalid input, try again or use --help.\033[0m")
+    }
 
     for scanner.Scan() {
          note := scanner.Text()
         //Skip file that we need to delete
-         if index == intRemoveIndex - 1{
+         if index == intRemoveIndex {
          	index++
           	continue
          }
@@ -116,17 +123,14 @@ func RemoveNote(fileName string, removeIndex string) {
          lineNumber := fmt.Sprintf("%03d", count)//Create a index tag for note
          lines = append(lines, lineNumber + " - " + note[6:])
          index++
+
     }
-    if len(lines) < intRemoveIndex - 1{
-    	fmt.Println(len(lines))
-    	fmt.Println("\033[91mInvalid input, try again or use --help.\033[0m")
-    }
+
 
     check(scanner.Err())
     update := strings.Join(lines, "\n")
     os.WriteFile(path, []byte(update), 0755)
 }
-
 
     check(scanner.Err())
     update := strings.Join(lines, "\n")
