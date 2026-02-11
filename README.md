@@ -133,11 +133,22 @@ You don't have any notes! Add your first note
 * os
 * strconv
 * strings
+<<<<<<< HEAD
 * time
+=======
+>>>>>>> ecb9897ad83d43b6eddcda62583a03e03fe9caf9
 
 
 
 ## Our team
 
+<<<<<<< HEAD
 __Daniil Danilov__    
 
+=======
+__Daniil Danilov__  
+__Lauri Juhani Prusi__  
+__Ryan Rodrigo Durante__  
+
+__Thanks for using our tool!__
+>>>>>>> ecb9897ad83d43b6eddcda62583a03e03fe9caf9

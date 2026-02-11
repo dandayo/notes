@@ -119,7 +119,7 @@ func RemoveNote(fileName string, removeIndex string) {
 	count := 0
 	fileCount := fileLineCount(path)
 
-	if intRemoveIndex-1 < 0 || intRemoveIndex-1 > fileCount {
+	if intRemoveIndex < 1 || intRemoveIndex > fileCount {
 		fmt.Println("\033[31mIncorrect index! Try again.\033[0m")
 	} else {
 		for scanner.Scan() {
