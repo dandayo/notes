@@ -40,7 +40,7 @@ $ --help
 4. Exit.
 > To exit from tool
 
-Just write the number of function and see the resut!
+Just write the number of function and see the result!
 
 ### Example
 #### Welcome page
@@ -134,6 +134,7 @@ You don't have any notes! Add your first note
 * strconv
 * strings
 * time
+* github.com/eiannone/keyboard (to use arrows)
 
 
 

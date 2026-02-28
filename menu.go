@@ -7,14 +7,6 @@ import (
 	"github.com/eiannone/keyboard"
 )
 
-func readKey() keyboard.Key {
-	_, key, err := keyboard.GetKey()
-	if err != nil {
-		panic(err)
-	}
-	return key
-}
-
 func renderMenu(selected int) {
 	options := []string{
 		"Show notes",
@@ -43,7 +35,7 @@ func renderMenu(selected int) {
 
 	for i, option := range options {
 		if i == selected {
-			fmt.Printf("%s%d. %s\033[0m\n", oppositeColors[i], i+1, option)
+			fmt.Printf("->%s %s\033[0m\n", oppositeColors[i], option)
 		} else {
 			fmt.Printf("%s%d. %s\033[0m\n", colors[i], i+1, option)
 		}
@@ -88,7 +80,11 @@ func Menu(name string) {
 			keyboard.Close()
 			execute(selected, name)
 			keyboard.Open()
+
+		default:
+			EmptyTerminal()
 		}
+
 	}
 }
 
@@ -108,6 +104,8 @@ func execute(selected int, name string) {
 
 	case 2:
 		EmptyTerminal()
+		ReadFile(name)
+		fmt.Println("\n")
 		fmt.Println("\033[33mEnter the number of note to remove or 0 to cancel:\033[0m")
 		index := input()
 		if index == "0" {
@@ -117,14 +115,12 @@ func execute(selected int, name string) {
 		} else {
 			RemoveNote(name, index)
 		}
-		fmt.Println("\n")
-		ReadFile(name)
 
 	case 3:
 		EmptyTerminal()
 		fmt.Println("\033[91mAre you sure?! Press '1' if agree to delete file\033[0m")
-		doublecheck := input()
-		if doublecheck != "1" {
+		doubleCheck := input()
+		if doubleCheck != "1" {
 			return
 		} else {
 			DeleteFile(name)
@@ -132,7 +128,8 @@ func execute(selected int, name string) {
 		}
 
 	case 4:
-		fmt.Println("Goodbye!")
+		EmptyTerminal()
+		fmt.Println("\n\033[42mGoodbye!\033[0m\n")
 		os.Exit(0)
 	}
 }

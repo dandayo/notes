@@ -16,8 +16,8 @@ func OpenFile(fileName string) *os.File {
 	check(err)
 
 	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
-	defer file.Close() //Starting work with the file
 	check(err)
+	defer file.Close() //Starting work with the file
 
 	return file
 }
@@ -108,6 +108,7 @@ func DeleteFile(fileName string) {
 func RemoveNote(fileName string, removeIndex string) {
 	path := "notes/" + fileName + ".txt"
 	intRemoveIndex, err := strconv.Atoi(removeIndex) //Convert input from string to int
+	check(err)
 	notes, err := os.Open(path)
 	check(err)
 	defer notes.Close()
