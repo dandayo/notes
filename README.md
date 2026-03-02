@@ -1,144 +1,50 @@
-# Notes tool
+# Project Title
 
-Here is our tool. You can create .txt files with list of notes, change note, show list of notes and delete note.
+A brief description of your project.
+
+## Prerequisites
+- Go version 1.16 or higher
+- Any other tools necessary for the project.
+
+## Installation
+
+Follow these steps to install the project:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/dandayo/notes.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd notes
+   ```
+3. Install dependencies:
+   ```bash
+   go mod tidy
+   ```
+
+## Project Structure
+
+```
+notes/
+├── cmd/          # Main application entry point
+├── pkg/          # Library code
+├── internal/     # Private application code
+└── go.mod        # Dependency file
+```
+
+## Requirements
+To run this project, ensure you have the following:
+- [Go Modules](https://golang.org/doc/go-modules) to manage dependencies.
+- Any specific tools or dependencies listed in the `go.mod` file.
 
 ## Usage
-### How to Build
- You need to build before the start
-```
-$ go build -o notestool
-```
 
-### How to run
-You can start your note's in write terminal, it takes only first argument. If you want to use whitespace use "_" between words
+Instructions on how to use your project.
 
-```
-$ ./notestool name_for_notes
-```
-You need to write name of your list of notes!
-```
-$ ./notestool  
-Usage: ./todotool [TAG]  
-```
-### Help
+## Contributing
 
-If you need to help or don't understand how it works write `--help` after.
+Guidelines for contributing to this project.
 
-```
-$ --help  
-```
+## License
 
-### Menu
-
-
-1. Show notes.
-> Show list of notes
-2. Add a note.
-> Add new note to the end of lists note
-3. Delete a note.
-> Delete the note by index, that you can see on the left side of note
-4. Exit.
-> To exit from tool
-
-Just write the number of function and see the result!
-
-### Example
-#### Welcome page
-```
-===Welcome to the notes tool!===
-
-Select operation:
-
-1. Show notes.
-2. Add a note.
-3. Delete a note.
-4. Delete all notes. Be careful
-5. Exit.
-```
-#### Add and show notes
-```
-Title: test
-You don't have any notes! Add your first note
-
-Select operation:
-
-1. Show notes.
-2. Add a note.
-3. Delete a note.
-4. Delete all notes. Be careful
-5. Exit.
-
-[YourInput] -> 2
-
-Enter the note text:
-First note
-
-Select operation:
-
-1. Show notes.
-2. Add a note.
-3. Delete a note.
-4. Delete all notes. Be careful
-5. Exit.
-
-[YourInput] -> 1
-
-Title: test
-001 - First note		02 Feb 2026 11:12
-
-```
-#### Delete notes
-```
-Select operation:
-
-1. Show notes.
-2. Add a note.
-3. Delete a note.
-4. Delete all notes. Be careful
-5. Exit.
-
-[YourInput] -> 3
-Enter the number of note to remove or 0 to cancel:
-1
-
-Select operation:
-
-1. Show notes.
-2. Add a note.
-3. Delete a note.
-4. Delete all notes. Be careful
-5. Exit.
-
-[YourInput] -> 1
-
-Title: test
-You don't have any notes! Add your first note
-```
-
-#### Welcome page
-```
-[YourInput] -> 5
-===Goodbye!===
-```
-### Mistakes
-
-* Empty input.
-* Wrong name on the the start
-* Invalid input in menu
-
-### Imports that we used in this tool
-
-* bufio
-* fmt
-* os
-* strconv
-* strings
-* time
-* github.com/eiannone/keyboard (to use arrows)
-
-
-
-## Our team
-
-__Daniil Danilov__    
-
+This project is licensed under the MIT License.
