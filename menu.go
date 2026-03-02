@@ -13,6 +13,7 @@ func renderMenu(selected int) {
 		"Add a note",
 		"Delete a note",
 		"Delete all notes. Be careful!",
+		"Help",
 		"Exit",
 	}
 
@@ -21,14 +22,17 @@ func renderMenu(selected int) {
 		"\033[34m",
 		"\033[33m",
 		"\033[31m",
+		"\033[32m",
 		"\033[35m",
 	}
+
 	oppositeColors := []string{
 		"\033[30;46m",
-		"\033[97;44m",
+		"\033[30;44m",
 		"\033[30;43m",
-		"\033[97;41m",
-		"\033[97;45m",
+		"\033[30;41m",
+		"\033[30;42m",
+		"\033[30;45m",
 	}
 
 	fmt.Println("\nSelect operation:\n")
@@ -54,7 +58,7 @@ func clearMenu(height int) {
 
 func Menu(name string) {
 	selected := 0
-	var height int = 9 // lines in menu
+	var height int = 10 // lines in menu
 	err := keyboard.Open()
 	check(err)
 
@@ -69,7 +73,7 @@ func Menu(name string) {
 		case keyboard.KeyArrowUp:
 			selected--
 			if selected < 0 {
-				selected = 4
+				selected = 5
 			}
 			clearMenu(height)
 			renderMenu(selected)
@@ -77,7 +81,7 @@ func Menu(name string) {
 		case keyboard.KeyArrowDown:
 
 			selected++
-			if selected > 4 {
+			if selected > 5 {
 				selected = 0
 			}
 			clearMenu(height)
@@ -123,7 +127,6 @@ func execute(selected int, name string) {
 		} else {
 			RemoveNote(name, index)
 		}
-		EmptyTerminal()
 
 	case 3:
 		EmptyTerminal()
@@ -137,6 +140,10 @@ func execute(selected int, name string) {
 		}
 
 	case 4:
+		EmptyTerminal()
+		Help()
+
+	case 5:
 		EmptyTerminal()
 		fmt.Println("\n\033[42mGoodbye!\033[0m\n")
 		os.Exit(0)

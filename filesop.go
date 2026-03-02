@@ -71,7 +71,7 @@ func AddNote(fileName string, note string) {
 	check(err)
 	defer file.Close()
 
-	if note == "" {
+	if note == "" || note == "--help" {
 		return
 	}
 
@@ -102,14 +102,16 @@ func DeleteFile(fileName string) {
 	err := os.Remove(path)
 	check(err)
 	fmt.Println("\n\033[97;41mFile deleted :(\033[0m")
-	fmt.Println("\n\033[42mGoodbye!\033[0m\n")
+	fmt.Println("\033[42mGoodbye!\033[0m\n")
 }
 
 // Delete note by index from file
 func RemoveNote(fileName string, removeIndex string) {
 	path := "notes/" + fileName + ".txt"
 	intRemoveIndex, err := strconv.Atoi(removeIndex) //Convert input from string to int
-	check(err)
+	if err != nil {
+		fmt.Println("\033[91mIndex should be a number!\033[0m")
+	}
 	notes, err := os.Open(path)
 	check(err)
 	defer notes.Close()
@@ -122,7 +124,7 @@ func RemoveNote(fileName string, removeIndex string) {
 	fileCount := fileLineCount(path)
 
 	if intRemoveIndex < 1 || intRemoveIndex > fileCount {
-		fmt.Println("\033[31mIncorrect index! Try again.\033[0m")
+		fmt.Println("\033[91mIncorrect index! Try again.\033[0m")
 	} else {
 		for scanner.Scan() {
 			note := scanner.Text()
