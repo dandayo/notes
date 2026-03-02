@@ -12,10 +12,10 @@ import (
 // Open file or create the new
 func OpenFile(fileName string) *os.File {
 	path := "notes/" + fileName + ".txt"
-	err := os.MkdirAll("notes", 0755)
+	err := os.MkdirAll("notes", 0700)
 	check(err)
 
-	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
+	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0700)
 	check(err)
 	defer file.Close() //Starting work with the file
 
@@ -67,7 +67,7 @@ func AddNote(fileName string, note string) {
 
 	path := "notes/" + fileName + ".txt"
 
-	file, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
+	file, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0700)
 	check(err)
 	defer file.Close()
 
@@ -101,7 +101,8 @@ func DeleteFile(fileName string) {
 	path := "notes/" + fileName + ".txt"
 	err := os.Remove(path)
 	check(err)
-	fmt.Println("File deleted :(")
+	fmt.Println("\n\033[97;41mFile deleted :(\033[0m")
+	fmt.Println("\n\033[42mGoodbye!\033[0m\n")
 }
 
 // Delete note by index from file
@@ -139,6 +140,6 @@ func RemoveNote(fileName string, removeIndex string) {
 		}
 		check(scanner.Err())
 		update := strings.Join(lines, "\n")
-		os.WriteFile(path, []byte(update), 0755)
+		os.WriteFile(path, []byte(update), 0700)
 	}
 }

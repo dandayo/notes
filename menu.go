@@ -44,47 +44,55 @@ func renderMenu(selected int) {
 	fmt.Println()
 }
 
+func clearMenu(height int) {
+	fmt.Printf("\033[%dA", height) //
+	for i := 0; i < height; i++ {
+		fmt.Print("\033[2K\n")
+	}
+	fmt.Printf("\033[%dA", height)
+}
+
 func Menu(name string) {
 	selected := 0
-
+	var height int = 9 // lines in menu
 	err := keyboard.Open()
-	if err != nil {
-		panic(err)
-	}
-	defer keyboard.Close()
+	check(err)
 
+	defer keyboard.Close()
+	renderMenu(selected)
 	for {
-		renderMenu(selected)
 		_, key, err := keyboard.GetKey()
-		if err != nil {
-			panic(err)
-		}
+		check(err)
 
 		switch key {
 
 		case keyboard.KeyArrowUp:
 			selected--
-			EmptyTerminal()
 			if selected < 0 {
 				selected = 4
 			}
+			clearMenu(height)
+			renderMenu(selected)
 
 		case keyboard.KeyArrowDown:
+
 			selected++
-			EmptyTerminal()
 			if selected > 4 {
 				selected = 0
 			}
+			clearMenu(height)
+			renderMenu(selected)
 
 		case keyboard.KeyEnter:
 			keyboard.Close()
 			execute(selected, name)
 			keyboard.Open()
+			renderMenu(selected)
 
 		default:
-			EmptyTerminal()
+			clearMenu(height)
+			renderMenu(selected)
 		}
-
 	}
 }
 
@@ -115,6 +123,7 @@ func execute(selected int, name string) {
 		} else {
 			RemoveNote(name, index)
 		}
+		EmptyTerminal()
 
 	case 3:
 		EmptyTerminal()
