@@ -13,19 +13,15 @@ $ go build -o notestool
 Or you can change `notestool` to your own name
 
 ### How to run
-You can start your note's in write terminal, it takes only first argument. If you want to use whitespace use "_" between words
+You can start your note's tool in terminal. After you will see the selection where you can choose notes file or create new, it takes only first argument. If you want to use whitespace use "_" between words.
 
 ```
-$ ./notestool name_for_notes
-```
-You need to write name of your list of notes!
-```
-$ ./notestool  
-Usage: ./notestool [TAG]  
+$ ./notestool
 ```
 ### Help
 
-If you need to help or don't understand how it works write `--help` after.
+If you need to help or don't understand how it works write `--help` after.  
+Also you can find the `help` in menu.
 
 ```
 $ --help  or ./notestool --help

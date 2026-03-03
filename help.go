@@ -4,8 +4,43 @@ import (
 	"fmt"
 )
 
-func Help() { //Print help for our user
-	fmt.Print("\nNotes Tool — Help\n\nThis tool allows you to create, view, and manage your personal notes directly from the terminal.\n\nHow to start:\nRun the program with a note file name:\n  ./notestool note_name\nIf the file does not exist, it will be created automatically.\n\nNavigation:\nUse ↑ and ↓ arrow keys to move through the menu.\nPress Enter to select an option.\n\nMenu Options:\n1. Show notes — Displays all saved notes.\n2. Add a note — Write a new note and press Enter to save.\n3. Delete a note — Enter the note number to remove it or 0 to cancel.\n4. Delete all notes — Permanently removes the file after confirmation.\n5. Exit — Safely closes the program.\n\nInvalid input will not crash the program.\n")
+func Help() {
+	fmt.Println(`
+Notes Tool - CLI Notes Manager
+
+USAGE:
+  ./notestool
+  ./notestool --help
+
+DESCRIPTION:
+  After launch you can select an existing note file
+  or create a new one using arrow keys.
+
+NAVIGATION:
+  ↑  Move up
+  ↓  Move down
+  Enter  Select option
+
+WORKFLOW:
+  1. Select existing file OR create new file
+  2. Use main menu to manage notes
+
+MAIN MENU OPTIONS:
+  1. Show notes        - Display all notes in file
+  2. Add a note        - Add new note to the end
+  3. Delete a note     - Remove note by index
+  4. Delete all notes  - Remove all notes (careful)
+  5. Exit              - Close the program
+
+NOTES:
+  - All files are stored inside "notes/" directory
+  - Files are saved in .txt format
+  - Empty input is not allowed
+
+EXAMPLE:
+  ./notestool
+
+`)
 }
 
 /*

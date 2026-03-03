@@ -32,9 +32,9 @@ func chooseFile(options []string, selected int) {
 		} else if i == len(options)-2 {
 			fmt.Printf("\033[35m%s\033[0m\n", option)
 		} else if selected == len(options)-1 && i == len(options)-1 {
-			fmt.Printf("\033[30;45m%s\033[0m\n", option)
+			fmt.Printf("\033[30;41m%s\033[0m\n", option)
 		} else if i == len(options)-1 {
-			fmt.Printf("\033[35m%s\033[0m\n", option)
+			fmt.Printf("\033[31m%s\033[0m\n", option)
 		} else if i == selected {
 			fmt.Printf("\033[30;46m%s\033[0m\n", option)
 		} else {
