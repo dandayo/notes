@@ -9,9 +9,16 @@ import (
 	"time"
 )
 
-// Open file or create the new
+// Open file
 func OpenFile(fileName string) *os.File {
-	path := "notes/" + fileName + ".txt"
+	path := fileName
+	if !strings.HasPrefix(path, "notes/") {
+		path = "notes/" + path
+	}
+	if !strings.HasSuffix(path, ".txt") {
+		path += ".txt"
+	}
+
 	err := os.MkdirAll("notes", 0700)
 	check(err)
 
@@ -22,14 +29,44 @@ func OpenFile(fileName string) *os.File {
 	return file
 }
 
+func CreateFile() string {
+	fmt.Println("\n\033[32mCreate a new notes! If you want to go back input 0 \nChoose your name:\033[0m")
+	cursorOn()
+	newName := input()
+	if newName == "" {
+		CreateFile()
+	} else if newName == "0" {
+		main()
+	}
+	path := newName
+	if !strings.HasPrefix(path, "notes/") {
+		path = "notes/" + path
+	}
+	if !strings.HasSuffix(path, ".txt") {
+		path += ".txt"
+	}
+	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0700)
+	check(err)
+	defer file.Close()
+
+	return newName
+}
+
 // Read file for return list of notes
 func ReadFile(fileName string) {
-	path := "notes/" + fileName + ".txt"
-	myfile, err := os.Open(path) //open the file in folder
-	check(err)
-	defer myfile.Close()
+	path := fileName
+	if !strings.HasPrefix(path, "notes/") {
+		path = "notes/" + path
+	}
+	if !strings.HasSuffix(path, ".txt") {
+		path += ".txt"
+	}
 
-	scanner := bufio.NewScanner(myfile) //scan the contents of a file and print line by line
+	file, err := os.Open(path) //open the file in folder
+	check(err)
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file) //scan the contents of a file and print line by line
 	isEmpty := true
 	for scanner.Scan() {
 		isEmpty = false
@@ -55,6 +92,7 @@ func fileLineCount(path string) int {
 	for scanner.Scan() {
 		lines++
 	}
+
 	return lines
 }
 
@@ -65,7 +103,14 @@ const (
 
 func AddNote(fileName string, note string) {
 
-	path := "notes/" + fileName + ".txt"
+	path := fileName
+	if !strings.HasPrefix(path, "notes/") { // add this logic to avoid problems if user write empty input 2 times, dont create "notes/notes/fileName.txt.txt"
+		path = "notes/" + path
+	}
+	if !strings.HasSuffix(path, ".txt") {
+		path += ".txt"
+	}
+	cursorOn()
 
 	file, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0700)
 	check(err)
@@ -98,7 +143,13 @@ func AddNote(fileName string, note string) {
 
 // Func for deleting file
 func DeleteFile(fileName string) {
-	path := "notes/" + fileName + ".txt"
+	path := fileName
+	if !strings.HasPrefix(path, "notes/") {
+		path = "notes/" + path
+	}
+	if !strings.HasSuffix(path, ".txt") {
+		path += ".txt"
+	}
 	err := os.Remove(path)
 	check(err)
 	fmt.Println("\n\033[97;41mFile deleted :(\033[0m")
@@ -107,9 +158,16 @@ func DeleteFile(fileName string) {
 
 // Delete note by index from file
 func RemoveNote(fileName string, removeIndex string) {
-	path := "notes/" + fileName + ".txt"
+	path := fileName
+	if !strings.HasPrefix(path, "notes/") {
+		path = "notes/" + path
+	}
+	if !strings.HasSuffix(path, ".txt") {
+		path += ".txt"
+	}
+	fileCount := fileLineCount(path)
 	intRemoveIndex, err := strconv.Atoi(removeIndex) //Convert input from string to int
-	if err != nil {
+	if err != nil && removeIndex != "" {
 		fmt.Println("\033[91mIndex should be a number!\033[0m")
 	}
 	notes, err := os.Open(path)
@@ -121,7 +179,6 @@ func RemoveNote(fileName string, removeIndex string) {
 	var index int = 0
 	// for reordering of line number
 	count := 0
-	fileCount := fileLineCount(path)
 
 	if intRemoveIndex < 1 || intRemoveIndex > fileCount {
 		fmt.Println("\033[91mIncorrect index! Try again.\033[0m")

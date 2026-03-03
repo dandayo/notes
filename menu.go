@@ -48,14 +48,6 @@ func renderMenu(selected int) {
 	fmt.Println()
 }
 
-func clearMenu(height int) {
-	fmt.Printf("\033[%dA", height) //
-	for i := 0; i < height; i++ {
-		fmt.Print("\033[2K\n")
-	}
-	fmt.Printf("\033[%dA", height)
-}
-
 func Menu(name string) {
 	selected := 0
 	var height int = 10 // lines in menu
@@ -67,7 +59,7 @@ func Menu(name string) {
 	for {
 		_, key, err := keyboard.GetKey()
 		check(err)
-
+		cursorOff()
 		switch key {
 
 		case keyboard.KeyArrowUp:
@@ -111,14 +103,17 @@ func execute(selected int, name string) {
 	case 1:
 		EmptyTerminal()
 		fmt.Println("Enter the note text:")
+		cursorOn()
 		note := input()
 		AddNote(name, note)
+		cursorOff()
 
 	case 2:
 		EmptyTerminal()
 		ReadFile(name)
 		fmt.Println("\n")
 		fmt.Println("\033[33mEnter the number of note to remove or 0 to cancel:\033[0m")
+		cursorOn()
 		index := input()
 		if index == "0" {
 			return
@@ -127,10 +122,12 @@ func execute(selected int, name string) {
 		} else {
 			RemoveNote(name, index)
 		}
+		cursorOff()
 
 	case 3:
 		EmptyTerminal()
 		fmt.Println("\033[91mAre you sure?! Press '1' if agree to delete file\033[0m")
+		cursorOn()
 		doubleCheck := input()
 		if doubleCheck != "1" {
 			return
@@ -138,6 +135,7 @@ func execute(selected int, name string) {
 			DeleteFile(name)
 			os.Exit(0)
 		}
+		cursorOff()
 
 	case 4:
 		EmptyTerminal()
@@ -145,7 +143,7 @@ func execute(selected int, name string) {
 
 	case 5:
 		EmptyTerminal()
-		fmt.Println("\n\033[42mGoodbye!\033[0m\n")
+		fmt.Println("\n\033[42m	===Goodbye!===		\033[0m\n")
 		os.Exit(0)
 	}
 }

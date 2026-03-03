@@ -27,9 +27,26 @@ func EmptyTerminal() {
 	fmt.Print("\033[3J\033[H\033[2J")
 }
 
+// Clean the menu
+func clearMenu(height int) {
+	fmt.Printf("\033[%dA", height) //
+	for i := 0; i < height; i++ {
+		fmt.Print("\033[2K\n")
+	}
+	fmt.Printf("\033[%dA", height)
+}
+
 // Check the errors
 func check(e error) {
 	if e != nil {
-		fmt.Println("\033[91mMistake! Something gone wrong\033[0m")
+		panic(e)
 	}
+}
+
+func cursorOn() {
+	fmt.Print("\033[?25h")
+}
+
+func cursorOff() {
+	fmt.Print("\033[?25l")
 }
