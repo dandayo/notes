@@ -51,10 +51,11 @@ func renderMenu(selected int) {
 func Menu(name string) {
 	selected := 0
 	var height int = 10 // lines in menu
+
 	err := keyboard.Open()
 	check(err)
-
 	defer keyboard.Close()
+
 	renderMenu(selected)
 	for {
 		_, key, err := keyboard.GetKey()
@@ -111,7 +112,7 @@ func execute(selected int, name string) {
 	case 2:
 		EmptyTerminal()
 		ReadFile(name)
-		fmt.Println("\n")
+		fmt.Printf("\n")
 		fmt.Println("\033[33mEnter the number of note to remove or 0 to cancel:\033[0m")
 		cursorOn()
 		index := input()
@@ -143,7 +144,7 @@ func execute(selected int, name string) {
 
 	case 5:
 		EmptyTerminal()
-		fmt.Println("\n\033[42m	===Goodbye!===		\033[0m\n")
+		fmt.Printf("\n\033[42m	===Goodbye!===		\033[0m\n")
 		os.Exit(0)
 	}
 }

@@ -54,8 +54,6 @@ func fileSelect() string {
 		fmt.Println("\033[33mYou don't have any notes\033[0m")
 		return ""
 	}
-
-	defer keyboard.Close()
 	chooseFile(options, selected)
 	for {
 
@@ -82,7 +80,7 @@ func fileSelect() string {
 				return name
 			} else if selected == len(options)-1 {
 				EmptyTerminal()
-				fmt.Println("\n\033[42m	===Goodbye!===		\033[0m\n")
+				fmt.Printf("\n\033[42m	===Goodbye!===		\033[0m\n")
 				os.Exit(0)
 			} else {
 				keyboard.Close()

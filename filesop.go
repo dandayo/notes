@@ -9,6 +9,11 @@ import (
 	"time"
 )
 
+const (
+	TimeColor = "\033[38;5;105m"
+	Reset     = "\033[0m"
+)
+
 // Open file
 func OpenFile(fileName string) *os.File {
 	path := fileName
@@ -38,14 +43,14 @@ func CreateFile() string {
 	} else if newName == "0" {
 		main()
 	}
-	path := newName
-	if !strings.HasPrefix(path, "notes/") {
-		path = "notes/" + path
+
+	if !strings.HasPrefix(newName, "notes/") {
+		newName = "notes/" + newName
 	}
-	if !strings.HasSuffix(path, ".txt") {
-		path += ".txt"
+	if !strings.HasSuffix(newName, ".txt") {
+		newName += ".txt"
 	}
-	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0700)
+	file, err := os.OpenFile(newName, os.O_RDWR|os.O_CREATE, 0700)
 	check(err)
 	defer file.Close()
 
@@ -68,10 +73,12 @@ func ReadFile(fileName string) {
 
 	scanner := bufio.NewScanner(file) //scan the contents of a file and print line by line
 	isEmpty := true
+	count := 1
 	for scanner.Scan() {
-		isEmpty = false
 		line := scanner.Text()
-		fmt.Println(line)
+		fmt.Printf("%03d - %s\n", count, decryptNote(line))
+		count++
+		isEmpty = false
 	}
 	if isEmpty { //If it empty return the message
 		fmt.Println("\033[31mYou don't have any notes! Add your first note\033[0m")
@@ -79,27 +86,6 @@ func ReadFile(fileName string) {
 	check(scanner.Err())
 
 }
-
-// function to get the number of lines before append
-func fileLineCount(path string) int {
-	file, err := os.Open(path)
-	check(err)
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	lines := 0
-
-	for scanner.Scan() {
-		lines++
-	}
-
-	return lines
-}
-
-const (
-	TimeColor = "\033[38;5;105m"
-	Reset     = "\033[0m"
-)
 
 func AddNote(fileName string, note string) {
 
@@ -120,40 +106,33 @@ func AddNote(fileName string, note string) {
 		return
 	}
 
-	lineNum := fileLineCount(path) + 1
-	size := fmt.Sprintf("%03d", lineNum)
-
 	timeStamp := time.Now().Format("02 Jan 2006 15:04")
 
 	data := fmt.Sprintf(
-		"%-3s - %-40s | %s%s%s",
-		size,
+		"%-40s | %s%s%s",
 		note,
 		TimeColor, timeStamp, Reset,
 	)
 
-	// Move the string to next line if thats not first
-	if lineNum > 1 {
-		data = "\n" + data
-	}
-
-	_, err = file.WriteString(data)
-	check(err)
+	//Here i try to encrypt the note
+	line := encryptNote(data)
+	file.WriteString(line + "\n")
 }
 
-// Func for deleting file
-func DeleteFile(fileName string) {
-	path := fileName
-	if !strings.HasPrefix(path, "notes/") {
-		path = "notes/" + path
-	}
-	if !strings.HasSuffix(path, ".txt") {
-		path += ".txt"
-	}
-	err := os.Remove(path)
+// function to get the number of lines before append
+func fileLineCount(path string) int {
+	file, err := os.Open(path)
 	check(err)
-	fmt.Println("\n\033[97;41mFile deleted :(\033[0m")
-	fmt.Println("\033[42mGoodbye!\033[0m\n")
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	lines := 0
+
+	for scanner.Scan() {
+		lines++
+	}
+
+	return lines
 }
 
 // Delete note by index from file
@@ -177,28 +156,38 @@ func RemoveNote(fileName string, removeIndex string) {
 	var lines []string
 	scanner := bufio.NewScanner(notes)
 	var index int = 0
-	// for reordering of line number
-	count := 0
 
 	if intRemoveIndex < 1 || intRemoveIndex > fileCount {
 		fmt.Println("\033[91mIncorrect index! Try again.\033[0m")
 	} else {
 		for scanner.Scan() {
 			note := scanner.Text()
-
+			note = decryptNote(note)
 			//Skip file that we need to delete
 			if index == intRemoveIndex-1 {
 				index++
 				continue
 			}
-			count++
-			lineNumber := fmt.Sprintf("%03d", count) //Create a index tag for note
-			lines = append(lines, lineNumber+" - "+note[6:])
+			lines = append(lines, encryptNote(note))
 			index++
 
 		}
 		check(scanner.Err())
-		update := strings.Join(lines, "\n")
-		os.WriteFile(path, []byte(update), 0700)
+		os.WriteFile(path, []byte(strings.Join(lines, "\n")), 0700)
 	}
+}
+
+// Func for deleting file
+func DeleteFile(fileName string) {
+	path := fileName
+	if !strings.HasPrefix(path, "notes/") {
+		path = "notes/" + path
+	}
+	if !strings.HasSuffix(path, ".txt") {
+		path += ".txt"
+	}
+	err := os.Remove(path)
+	check(err)
+	fmt.Println("\n\033[97;41mFile deleted :(\033[0m")
+	fmt.Printf("\033[42mGoodbye!\033[0m\n")
 }

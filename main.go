@@ -17,6 +17,5 @@ func main() {
 	cursorOff()
 	filename := fileSelect()
 	EmptyTerminal() // to clean after open file
-	fmt.Printf("\033[4mTitle: %s\033[0m\n", filename)
-	Menu(filename) //Start menu
+	Menu(filename)  //Start menu
 }
