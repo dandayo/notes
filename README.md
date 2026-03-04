@@ -1,6 +1,9 @@
 # Notes tool
 
-Here is our tool. You can create .txt files with list of notes, change note, show list of notes and delete note.
+Secure CLI notes manager written in Go.
+
+This tool allows you to create and manage note files directly from the terminal.
+All notes are encrypted using the Blowfish algorithm and encoded with Base64 before being stored on disk.
 
 ## Usage
 ### How to Build
@@ -26,6 +29,23 @@ Also you can find the `help` in menu.
 ```
 $ --help  or ./notestool --help
 ```
+
+### Encryption
+
+All notes are encrypted using the Blowfish algorithm before being written to disk. 
+
+* Encryption happens automatically when saving.  
+* Decryption happens automatically when reading.  
+
+Files stored in the `notes/` directory are not readable in plain text.  
+
+Example of encrypted file content: 
+
+```
+iguO1xwYrvIMx7DMRDRoFD9EBy0zx498pAaIkukOHRTly3UFCja1rmeTefnqc4M2YFURqMgr8fe+hBBdsAT4vZAunQWz+cFTehRWERTv83/h70A=
+
+```
+Without the program, the content cannot be interpreted.
 
 ### Menu
 
@@ -112,7 +132,7 @@ Enter the number of note to remove or 0 to cancel:
 ```
 
 
-## Project Structure
+### Project Structure
 
 ```
 notes/
@@ -120,9 +140,21 @@ notes/
 ├── filesop.go      # File operations (create, read, delete notes)
 ├── menu.go         # Interactive menu interface
 ├── main.go         # Entry point of the application
+├── secure.go       # Encrypt and decrypt functions
 └── usage.go        # Often usage functions
 ```
 
+### How Encryption Works
+
+When you save a note:
+1. The note text is encrypted using the Blowfish algorithm.
+2. The encrypted binary data is encoded using Base64.
+3. The Base64 string is written to the file.
+
+When reading:
+1. Base64 is decoded back into bytes.
+2. Blowfish decryption is applied.
+3. Original text is displayed.
 
 ### Mistakes
 
@@ -139,10 +171,15 @@ notes/
 * strings
 * time
 * github.com/eiannone/keyboard (to use arrows)
+* golang.org/x/crypto/blowfish
+* encoding/base64
+* crypto/cipher
+* crypto/rand
 
 
 
-## __Daniil Danilov__
+## Author
+__Daniil Danilov__
 
 
 
