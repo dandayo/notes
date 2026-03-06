@@ -162,7 +162,7 @@ When reading:
 * Wrong name on the the start
 * Invalid input in menu
 
-### Imports that we used in this tool
+### Imports that I used in this tool
 
 * bufio
 * fmt
