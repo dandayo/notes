@@ -15,7 +15,7 @@ func CheckFolder() bool { //check is it first usage or not
 	return false
 }
 
-func secretInput() { //input without showing the input in the terminal
+func hiddenInput() { //input without showing the input in the terminal
 
 }
 
