@@ -15,8 +15,22 @@ func CheckFolder() bool { //check is it first usage or not
 	return false
 }
 
-func hiddenInput() { //input without showing the input in the terminal
+func hiddenInput() string { //input without showing the input in the terminal
+	var password string
 
+	return password
+}
+
+func encryptPassword(string) string {
+	var encrypted string
+
+	return encrypted
+}
+
+func decryptPassword(string) string {
+	var decrypted string
+
+	return decrypted
 }
 
 func CreatePassword() string { //check do we have any notes or we need to create a password for notes
@@ -30,6 +44,7 @@ func CreatePassword() string { //check do we have any notes or we need to create
 		fmt.Println("Create a password for your notes, here is a hidden input, be careful")
 		password := input()
 
+		os.WriteFile("secret/check.dat", encrypted, 0644)
 		return password
 	} else {
 		password := input()
