@@ -33,23 +33,21 @@ func decryptPassword(string) string {
 	return decrypted
 }
 
-func CreatePassword() string { //check do we have any notes or we need to create a password for notes
+func CreatePassword() { //check do we have any notes or we need to create a password for notes
 	if !CheckFolder() {
 		err := os.Mkdir("secret", 0755) //create a folder to save the password
 		check(err)
 
-		file, err := os.Create("secret/" + "check" + ".txt")
+		file, err := os.Create("secret/" + "check" + ".dat")
 		check(err)
 
 		fmt.Println("Create a password for your notes, here is a hidden input, be careful")
-		password := input()
+		password := hiddenInput()
 
 		os.WriteFile("secret/check.dat", encrypted, 0644)
-		return password
 	} else {
 		password := input()
 		CheckPassword(password)
-		return password
 	}
 }
 
