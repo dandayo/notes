@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"github.com/tcnksm/go-input"
 )
 
 const passwordCheckWord = "password-created-and-checked-user-can-login-in-it"
@@ -16,7 +18,20 @@ func CheckFolder() bool { //check is it first usage or not
 }
 
 func hiddenInput() string { //input without showing the input in the terminal
-	var password string
+	fmt.Println("Enter your password: ")
+
+	ui := &input.UI{
+		Writer: os.Stdout,
+		Reader: os.Stdin,
+	}
+
+	password, err := ui.Ask("Enter password:", &input.Options{
+		Required: true,
+		Mask:     '*', // hide  input
+		Loop:     true,
+	})
+
+	check(err)
 
 	return password
 }
@@ -42,12 +57,11 @@ func CreatePassword() { //check do we have any notes or we need to create a pass
 		check(err)
 
 		fmt.Println("Create a password for your notes, here is a hidden input, be careful")
-		password := hiddenInput()
+		pass := hiddenInput()
 
 		os.WriteFile("secret/check.dat", encrypted, 0644)
 	} else {
-		password := input()
-		CheckPassword(password)
+		CheckPassword(pass)
 	}
 }
 
