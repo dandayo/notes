@@ -37,7 +37,7 @@ func OpenFile(fileName string) *os.File {
 func CreateFile() string {
 	fmt.Println("\n\033[32mCreate a new notes! If you want to go back input 0 \nChoose your name:\033[0m")
 	cursorOn()
-	newName := input()
+	newName := Input()
 	if newName == "" {
 		CreateFile()
 	} else if newName == "0" {

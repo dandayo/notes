@@ -10,7 +10,7 @@ import (
 )
 
 // Function for user input
-func input() string {
+func Input() string {
 	keyboard.Close()
 	scanner := bufio.NewScanner(os.Stdin)
 	//fmt.Printf("\033[38;5;60m->\033[0m")

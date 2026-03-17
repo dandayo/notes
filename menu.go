@@ -105,7 +105,7 @@ func execute(selected int, name string) {
 		EmptyTerminal()
 		fmt.Println("Enter the note text:")
 		cursorOn()
-		note := input()
+		note := Input()
 		AddNote(name, note)
 		cursorOff()
 
@@ -115,7 +115,7 @@ func execute(selected int, name string) {
 		fmt.Printf("\n")
 		fmt.Println("\033[33mEnter the number of note to remove or 0 to cancel:\033[0m")
 		cursorOn()
-		index := input()
+		index := Input()
 		if index == "0" {
 			return
 		} else if index == "--help" {
@@ -129,7 +129,7 @@ func execute(selected int, name string) {
 		EmptyTerminal()
 		fmt.Println("\033[91mAre you sure?! Press '1' if agree to delete file\033[0m")
 		cursorOn()
-		doubleCheck := input()
+		doubleCheck := Input()
 		if doubleCheck != "1" {
 			return
 		} else {

@@ -18,14 +18,13 @@ func CheckFolder() bool { //check is it first usage or not
 }
 
 func hiddenInput() string { //input without showing the input in the terminal
-	fmt.Println("Enter your password: ")
 
 	ui := &input.UI{
 		Writer: os.Stdout,
 		Reader: os.Stdin,
 	}
 
-	password, err := ui.Ask("Enter password:", &input.Options{
+	password, err := ui.Ask("Enter your password:", &input.Options{
 		Required: true,
 		Mask:     true, // hide  input
 		Loop:     true,
@@ -36,13 +35,13 @@ func hiddenInput() string { //input without showing the input in the terminal
 	return password
 }
 
-func encryptPassword(string) string {
-	var encrypted string
+func encryptPassword(string) []byte {
+	var encrypted []byte
 
 	return encrypted
 }
 
-func decryptPassword(string) string {
+func decryptPassword([]byte) string {
 	var decrypted string
 
 	return decrypted
