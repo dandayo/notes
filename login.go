@@ -27,7 +27,7 @@ func hiddenInput() string { //input without showing the input in the terminal
 
 	password, err := ui.Ask("Enter password:", &input.Options{
 		Required: true,
-		Mask:     '*', // hide  input
+		Mask:     true, // hide  input
 		Loop:     true,
 	})
 
@@ -53,15 +53,18 @@ func CreatePassword() { //check do we have any notes or we need to create a pass
 		err := os.Mkdir("secret", 0755) //create a folder to save the password
 		check(err)
 
-		file, err := os.Create("secret/" + "check" + ".dat")
-		check(err)
-
 		fmt.Println("Create a password for your notes, here is a hidden input, be careful")
-		pass := hiddenInput()
+		encryptPassword := encryptPassword(passwordCheckWord)
 
-		os.WriteFile("secret/check.dat", encrypted, 0644)
+		os.WriteFile("secret/check.dat", encryptPassword, 0644)
 	} else {
+		pass := hiddenInput()
 		CheckPassword(pass)
+		if CheckPassword(pass) {
+			fmt.Println("\033[32mPassword is correct! Welcome to your notes\033[0m")
+		} else {
+			fmt.Println("\033[31mWrong password! Try again\033[0m")
+		}
 	}
 }
 

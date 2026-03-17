@@ -9,7 +9,8 @@ import (
 )
 
 // key to encrypt / decrypt
-var key = []byte("password123")
+var password = hiddenInput()
+var key = []byte(password)
 
 // here we encrypt file
 func encryptNote(note string) string {

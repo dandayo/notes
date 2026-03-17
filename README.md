@@ -32,7 +32,7 @@ $ --help  or ./notestool --help
 
 ### Encryption
 
-All notes are encrypted using the Blowfish algorithm before being written to disk. 
+All notes are encrypted using the Blowfish algorithm and Base64 (to save it line by line) before being written to disk. 
 
 * Encryption happens automatically when saving.  
 * Decryption happens automatically when reading.  
