@@ -4,35 +4,38 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tcnksm/go-input"
+	"golang.org/x/term"
 )
 
 const passwordCheckWord = "password-created-and-checked-user-can-login-in-it"
 
 func CheckFolder() bool { //check is it first usage or not
-	files, _ := os.ReadDir("notes/")
-	if len(files) >= 1 {
+	files, err := os.ReadDir("notes/")
+	if err != nil {
+		return false //if we have an error that means we don't have the folder and it's first usage
+	}
+
+	if len(files) > 0 {
 		return true
 	}
-	return false
+	return true
 }
 
-func hiddenInput() string { //input without showing the input in the terminal
+func hiddenInput() string { // hidden input for password that you don't see ater tap a key
+	for {
+		fmt.Println("Enter your password, here is a hidden input, be careful")
+		bytePassword, err := term.ReadPassword(int(os.Stdin.Fd()))
+		check(err)
 
-	ui := &input.UI{
-		Writer: os.Stdout,
-		Reader: os.Stdin,
+		fmt.Println()
+
+		if len(bytePassword) == 0 {
+			fmt.Println("Password cannot be empty")
+			continue
+		}
+
+		return string(bytePassword)
 	}
-
-	password, err := ui.Ask("Enter your password:", &input.Options{
-		Required: true,
-		Mask:     true, // hide  input
-		Loop:     true,
-	})
-
-	check(err)
-
-	return password
 }
 
 func encryptPassword(string) []byte {
@@ -53,9 +56,9 @@ func CreatePassword() { //check do we have any notes or we need to create a pass
 		check(err)
 
 		fmt.Println("Create a password for your notes, here is a hidden input, be careful")
-		encryptPassword := encryptPassword(passwordCheckWord)
+		encPassword := encryptPassword(passwordCheckWord)
 
-		os.WriteFile("secret/check.dat", encryptPassword, 0644)
+		os.WriteFile("secret/check.dat", encPassword, 0644)
 	} else {
 		pass := hiddenInput()
 		CheckPassword(pass)
