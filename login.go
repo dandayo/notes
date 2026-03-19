@@ -41,12 +41,6 @@ func encryptPassword(string) []byte {
 	return encrypted
 }
 
-func decryptPassword([]byte) string {
-	var decrypted string
-
-	return decrypted
-}
-
 func CreatePassword() { //check do we have any notes or we need to create a password for notes
 	if !CheckFolder() {
 		err := os.MkdirAll("secret", 0755) //create a folder to save the password
