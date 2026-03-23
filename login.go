@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/sha256" // hash function to encrypt the password
 	"fmt"
 	"os"
 
@@ -48,9 +49,8 @@ func CreatePassword() { //check do we have any notes or we need to create a pass
 
 		fmt.Println("Create a password for your notes, here is a hidden input, be careful")
 		pass := hiddenInput()
-		encPassword := encryptPassword(pass)
-
-		err = os.WriteFile("secret/check.dat", encPassword, 0644)
+		hash := sha256.Sum256([]byte(pass))
+		err = os.WriteFile("secret/check.dat", hash[:], 0644)
 		check(err)
 	} else {
 		pass := hiddenInput()
