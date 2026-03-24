@@ -11,7 +11,7 @@ import (
 const passwordCheckWord = "password-created-and-checked-user-can-login-in-it"
 
 func CheckFolder() bool { //check is it first usage or not
-	files, err := os.ReadDir("notes/")
+	files, err := os.ReadDir("secret/")
 	if err != nil {
 		return false //if we have an error that means we don't have the folder and it's first usage
 	}
@@ -36,10 +36,14 @@ func hiddenInput() string { // hidden input for password that you don't see ater
 	}
 }
 
-func encryptPassword(string) []byte {
-	var encrypted []byte
-
-	return encrypted
+func updatePassword() { //update the password if the user wants to change it
+	if Input() == "--reset" {
+		err := os.Remove("secret/check.dat")
+		check(err)
+		fmt.Println("\n\033[97;41mPassword deleted :(\033[0m")
+		fmt.Printf("\033[42mGoodbye!\033[0m\n")
+		CreatePassword()
+	}
 }
 
 func CreatePassword() { //check do we have any notes or we need to create a password for notes
