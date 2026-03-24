@@ -12,6 +12,11 @@ USAGE:
   ./notestool
   ./notestool --help
 
+RESET PASSWORD:
+  ./notestool --reset
+  Write your previous password last time to confirm, that you is you.
+  If you reset your password, you will lose access to all your notes, so be careful!
+
 DESCRIPTION:
   After launch you can select an existing note file
   or create a new one using arrow keys.

@@ -32,7 +32,7 @@ $ --help  or ./notestool --help
 
 ### Reset password
 
-If you need to update your password, you can write  `--reset` with the `./notestool` (or your run word) and reset the password. Be careful you lost your previous notes, if you update your password.
+If you need to update your password, you can write  `--reset` with the `./notestool` (or your run word) and reset the password. Be careful you lost all your previous notes, if you update your password.
 
 
 ```

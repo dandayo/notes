@@ -60,7 +60,10 @@ func CreatePassword() string { //check do we have any notes or we need to create
 func CheckPassword(password string) bool { //check if the password is correct or not
 	hash := sha256.Sum256([]byte(password))
 	checkHash, err := os.ReadFile("secret/check.dat")
-	check(err)
+	if err != nil {
+		// password file doesn't exist
+		return false
+	}
 
 	if string(hash[:]) == string(checkHash) {
 		return true
@@ -70,9 +73,19 @@ func CheckPassword(password string) bool { //check if the password is correct or
 }
 
 func updatePassword() { //update the password if the user wants to change it
+	pass := hiddenInput()
+	if !CheckPassword(pass) {
+		fmt.Println("\033[31mWrong password. Cancelled.\033[0m")
+		return
+	}
+	pass = ""
+
 	err := os.Remove("secret/check.dat")
+	if err != nil {
+		fmt.Println("\033[31mError resetting password, maybe you don't have password before\033[0m")
+		return
+	}
 	os.RemoveAll("notes/")
-	check(err)
 	fmt.Println("\n\033[97;41mPassword deleted :(\033[0m")
 	fmt.Printf("\033[42mGoodbye!\033[0m\n")
 }
