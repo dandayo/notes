@@ -16,6 +16,9 @@ const (
 
 // Open file
 func OpenFile(fileName string) *os.File {
+	err := os.MkdirAll("notes", 0700)
+	check(err)
+
 	path := fileName
 	if !strings.HasPrefix(path, "notes/") {
 		path = "notes/" + path
@@ -23,9 +26,6 @@ func OpenFile(fileName string) *os.File {
 	if !strings.HasSuffix(path, ".txt") {
 		path += ".txt"
 	}
-
-	err := os.MkdirAll("notes", 0700)
-	check(err)
 
 	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0700)
 	check(err)
@@ -58,7 +58,7 @@ func CreateFile() string {
 }
 
 // Read file for return list of notes
-func ReadFile(fileName string) {
+func ReadFile(fileName string, password []byte) {
 	path := fileName
 	if !strings.HasPrefix(path, "notes/") {
 		path = "notes/" + path
@@ -76,7 +76,7 @@ func ReadFile(fileName string) {
 	count := 1
 	for scanner.Scan() {
 		line := scanner.Text()
-		fmt.Printf("%03d - %s\n", count, decryptNote(line))
+		fmt.Printf("%03d - %s\n", count, decryptNote(line, password)) //decrypt the note and print it with index
 		count++
 		isEmpty = false
 	}
@@ -87,7 +87,7 @@ func ReadFile(fileName string) {
 
 }
 
-func AddNote(fileName string, note string) {
+func AddNote(fileName string, note string, password []byte) {
 
 	path := fileName
 	if !strings.HasPrefix(path, "notes/") { // add this logic to avoid problems if user write empty input 2 times, dont create "notes/notes/fileName.txt.txt"
@@ -115,7 +115,7 @@ func AddNote(fileName string, note string) {
 	)
 
 	//Here i try to encrypt the note
-	line := encryptNote(data)
+	line := encryptNote(data, password)
 	file.WriteString(line + "\n")
 }
 
@@ -136,7 +136,7 @@ func fileLineCount(path string) int {
 }
 
 // Delete note by index from file
-func RemoveNote(fileName string, removeIndex string) {
+func RemoveNote(fileName string, removeIndex string, password []byte) {
 	path := fileName
 	if !strings.HasPrefix(path, "notes/") {
 		path = "notes/" + path
@@ -162,13 +162,13 @@ func RemoveNote(fileName string, removeIndex string) {
 	} else {
 		for scanner.Scan() {
 			note := scanner.Text()
-			note = decryptNote(note)
+			note = decryptNote(note, password)
 			//Skip file that we need to delete
 			if index == intRemoveIndex-1 {
 				index++
 				continue
 			}
-			lines = append(lines, encryptNote(note))
+			lines = append(lines, encryptNote(note, password))
 			index++
 
 		}

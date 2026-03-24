@@ -8,12 +8,8 @@ import (
 	"golang.org/x/crypto/blowfish" //blowfish import to encrypt a note in file
 )
 
-// key to encrypt / decrypt
-var password = hiddenInput()
-var key = []byte(password)
-
 // here we encrypt file
-func encryptNote(note string) string {
+func encryptNote(note string, key []byte) string {
 
 	block, err := blowfish.NewCipher(key)
 	check(err)
@@ -31,7 +27,7 @@ func encryptNote(note string) string {
 }
 
 // here we decrypt file
-func decryptNote(enc string) string {
+func decryptNote(enc string, key []byte) string {
 	raw, _ := base64.StdEncoding.DecodeString(enc) // get encrypted note
 
 	if len(raw) < 8 { // Blowfish block size

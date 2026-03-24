@@ -48,7 +48,7 @@ func renderMenu(selected int) {
 	fmt.Println()
 }
 
-func Menu(name string) {
+func Menu(name string, password []byte) {
 	selected := 0
 	var height int = 10 // lines in menu
 
@@ -82,7 +82,7 @@ func Menu(name string) {
 
 		case keyboard.KeyEnter:
 			keyboard.Close()
-			execute(selected, name)
+			execute(selected, name, password)
 			keyboard.Open()
 			renderMenu(selected)
 
@@ -93,25 +93,25 @@ func Menu(name string) {
 	}
 }
 
-func execute(selected int, name string) {
+func execute(selected int, name string, password []byte) {
 	switch selected {
 
 	case 0:
 		EmptyTerminal()
 		fmt.Printf("\033[4mTitle: %s\033[0m\n", name)
-		ReadFile(name)
+		ReadFile(name, password)
 
 	case 1:
 		EmptyTerminal()
 		fmt.Println("Enter the note text:")
 		cursorOn()
 		note := Input()
-		AddNote(name, note)
+		AddNote(name, note, password)
 		cursorOff()
 
 	case 2:
 		EmptyTerminal()
-		ReadFile(name)
+		ReadFile(name, password)
 		fmt.Printf("\n")
 		fmt.Println("\033[33mEnter the number of note to remove or 0 to cancel:\033[0m")
 		cursorOn()
@@ -121,7 +121,7 @@ func execute(selected int, name string) {
 		} else if index == "--help" {
 			return
 		} else {
-			RemoveNote(name, index)
+			RemoveNote(name, index, password)
 		}
 		cursorOff()
 
