@@ -73,6 +73,7 @@ func CheckPassword(password string) bool { //check if the password is correct or
 }
 
 func updatePassword() { //update the password if the user wants to change it
+	fmt.Println("\033[31mAll notes will be permanently deleted!\033[0m")
 	pass := hiddenInput()
 	if !CheckPassword(pass) {
 		fmt.Println("\033[31mWrong password. Cancelled.\033[0m")
