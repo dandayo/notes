@@ -30,6 +30,15 @@ Also you can find the `help` in menu.
 $ --help  or ./notestool --help
 ```
 
+### Reset password
+
+If you need to update your password, you can write  `--reset` with the `./notestool` (or your run word) and reset the password. Be careful you lost your previous notes, if you update your password.
+
+
+```
+$ ./notestool --reset
+```
+
 ### Encryption
 
 All notes are encrypted using the Blowfish algorithm and Base64 (to save it line by line) before being written to disk. 

@@ -14,6 +14,10 @@ func main() {
 		Help()
 		return
 	}
+	if len(os.Args) > 1 && os.Args[1] == "--reset" {
+		updatePassword()
+		return
+	}
 	cursorOff()
 	filename := fileSelect()
 	EmptyTerminal() // to clean after open file
