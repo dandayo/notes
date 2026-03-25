@@ -29,7 +29,6 @@ func OpenFile(fileName string) *os.File {
 
 	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0700)
 	check(err)
-	defer file.Close() //Starting work with the file
 
 	return file
 }
