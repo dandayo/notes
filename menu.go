@@ -124,6 +124,7 @@ func execute(selected int, name string, password []byte) {
 			RemoveNote(name, index, password)
 		}
 		cursorOff()
+		EmptyTerminal()
 
 	case 3:
 		EmptyTerminal()
