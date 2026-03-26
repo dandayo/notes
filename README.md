@@ -5,6 +5,10 @@ Secure CLI notes manager written in Go.
 This tool allows you to create and manage note files directly from the terminal.
 All notes are encrypted using the Blowfish algorithm and encoded with Base64 before being stored on disk.
 
+## Demo
+
+![Demo](demo.gif)
+
 ## Usage
 ### How to Build
 You need to build the tool before the start
